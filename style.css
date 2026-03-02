@@ -344,8 +344,16 @@ section {
     font-size: 0.8rem;
     color: var(--sage-green);
     display: block;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     font-weight: 600;
+}
+
+.price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--deep-rose);
+    margin-bottom: 1.5rem;
+    display: block;
 }
 
 /* How It Works */
