@@ -89,4 +89,66 @@ document.addEventListener('DOMContentLoaded', () => {
             window.open(`https://wa.me/${whatsappNumber}?text=${text}`, '_blank');
         });
     }
+
+    // Customer Reviews Slider
+    const track = document.querySelector('.reviews-track');
+    const cards = document.querySelectorAll('.review-card');
+    const prevBtn = document.querySelector('.prev-arrow');
+    const nextBtn = document.querySelector('.next-arrow');
+
+    if (track && cards.length > 0 && prevBtn && nextBtn) {
+        let currentIndex = 0;
+
+        const updateSlider = () => {
+            const cardRect = cards[0].getBoundingClientRect();
+            const cardWidth = cardRect.width;
+
+            // Get actual gap from computed styles
+            const trackStyle = window.getComputedStyle(track);
+            const gap = parseFloat(trackStyle.gap) || 0;
+
+            const slideAmount = cardWidth + gap;
+            const viewportWidth = track.parentElement.offsetWidth;
+
+            track.style.transform = `translateX(-${currentIndex * slideAmount}px)`;
+
+            // Calculate how many cards fit in the viewport
+            // We use a small epsilon to avoid floating point issues
+            const visibleCards = Math.floor((viewportWidth + gap) / (cardWidth + gap));
+
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex >= cards.length - visibleCards;
+
+            console.log(`Slider Update: Index ${currentIndex}, Visible ${visibleCards}, CardWidth ${cardWidth}, Viewport ${viewportWidth}`);
+        };
+
+        nextBtn.addEventListener('click', () => {
+            const cardWidth = cards[0].getBoundingClientRect().width;
+            const trackStyle = window.getComputedStyle(track);
+            const gap = parseFloat(trackStyle.gap) || 0;
+            const viewportWidth = track.parentElement.offsetWidth;
+            const visibleCards = Math.floor((viewportWidth + gap) / (cardWidth + gap));
+
+            if (currentIndex < cards.length - visibleCards) {
+                currentIndex++;
+                updateSlider();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSlider();
+            }
+        });
+
+        // Initialize after layout is stable
+        window.addEventListener('load', updateSlider);
+        window.addEventListener('resize', updateSlider);
+
+        // Initial call in case window.load already fired or for rapid dev
+        setTimeout(updateSlider, 100);
+    } else {
+        console.error('Slider elements not found:', { track: !!track, cards: cards.length, prev: !!prevBtn, next: !!nextBtn });
+    }
 });

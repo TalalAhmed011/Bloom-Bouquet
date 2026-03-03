@@ -393,7 +393,7 @@ section {
 /* Gallery */
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
@@ -441,19 +441,44 @@ section {
 .reviews {
     background: var(--primary-pink);
     color: var(--charcoal);
+    padding: 80px 0;
 }
 
-.reviews-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+.reviews-container {
+    width: 100%;
+    position: relative;
+    padding: 2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.reviews-viewport {
+    overflow: hidden;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.reviews-track {
+    display: flex;
     gap: 2rem;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .review-card {
     background: var(--white);
     padding: 2rem;
-    border-radius: 20px;
+    border-radius: 25px;
     box-shadow: var(--shadow);
+    width: calc(33.333% - 1.35rem);
+    /* Show 3 cards on most screens */
+    min-width: 250px;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
 }
 
 .review-text {
@@ -465,6 +490,60 @@ section {
     font-weight: 700;
     font-family: var(--font-heading);
     color: var(--deep-rose);
+}
+
+.nav-arrow {
+    background: var(--white);
+    color: var(--deep-rose);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.nav-arrow:hover {
+    background: var(--deep-rose);
+    color: var(--white);
+    transform: scale(1.1);
+}
+
+.nav-arrow:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #eee;
+    color: #999;
+}
+
+@media (max-width: 1100px) {
+    .review-card {
+        width: calc(50% - 1rem);
+        /* Show 2 cards */
+    }
+}
+
+@media (max-width: 768px) {
+    .review-card {
+        width: 100%;
+        /* Show 1 card */
+        min-width: 250px;
+    }
+
+    .nav-arrow {
+        width: 40px;
+        height: 40px;
+    }
+
+    .reviews-container {
+        gap: 0.5rem;
+    }
 }
 
 /* Contact Section */
